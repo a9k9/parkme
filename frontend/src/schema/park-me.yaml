@@ -1,0 +1,4789 @@
+openapi: 3.0.3
+info:
+  title: ParkMe API
+  version: 1.0.0
+  description: Universal Parking Management Platform - Production API
+paths:
+  /api/audit-logs/:
+    get:
+      operationId: api_audit_logs_list
+      description: |-
+        Audit log viewing - admin only
+
+        Critical for compliance and security investigations
+      parameters:
+      - in: query
+        name: action
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: resource_type
+        schema:
+          type: string
+      - in: query
+        name: user
+        schema:
+          type: string
+          format: uuid
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAuditLogList'
+          description: ''
+  /api/audit-logs/{id}/:
+    get:
+      operationId: api_audit_logs_retrieve
+      description: |-
+        Audit log viewing - admin only
+
+        Critical for compliance and security investigations
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this audit log.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditLog'
+          description: ''
+  /api/auth/token/:
+    post:
+      operationId: api_auth_token_create
+      description: |-
+        Takes a set of user credentials and returns an access and refresh JSON web
+        token pair to prove the authentication of those credentials.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPairRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPairRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPairRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenObtainPair'
+          description: ''
+  /api/auth/token/refresh/:
+    post:
+      operationId: api_auth_token_refresh_create
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+  /api/booking-extensions/:
+    get:
+      operationId: api_booking_extensions_list
+      description: Booking extensions
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedBookingExtensionList'
+          description: ''
+    post:
+      operationId: api_booking_extensions_create
+      description: Booking extensions
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookingExtensionRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/BookingExtensionRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BookingExtensionRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookingExtension'
+          description: ''
+  /api/booking-extensions/{id}/:
+    get:
+      operationId: api_booking_extensions_retrieve
+      description: Booking extensions
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this booking extension.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookingExtension'
+          description: ''
+    put:
+      operationId: api_booking_extensions_update
+      description: Booking extensions
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this booking extension.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookingExtensionRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/BookingExtensionRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BookingExtensionRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookingExtension'
+          description: ''
+    patch:
+      operationId: api_booking_extensions_partial_update
+      description: Booking extensions
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this booking extension.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedBookingExtensionRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedBookingExtensionRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedBookingExtensionRequest'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookingExtension'
+          description: ''
+    delete:
+      operationId: api_booking_extensions_destroy
+      description: Booking extensions
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this booking extension.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/bookings/:
+    get:
+      operationId: api_bookings_list
+      description: |-
+        Booking management
+
+        Drivers: their bookings
+        Staff: facility bookings
+      parameters:
+      - in: query
+        name: booking_type
+        schema:
+          type: string
+          enum:
+          - DRIVE_IN
+          - RESERVATION
+        description: |-
+          * `RESERVATION` - Advance Reservation
+          * `DRIVE_IN` - Drive-In (Walk-up)
+      - in: query
+        name: facility
+        schema:
+          type: string
+          format: uuid
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - ACTIVE
+          - CANCELLED
+          - COMPLETED
+          - CONFIRMED
+          - NO_SHOW
+          - PENDING
+        description: |-
+          * `PENDING` - Pending Payment
+          * `CONFIRMED` - Confirmed
+          * `ACTIVE` - Currently Parked
+          * `COMPLETED` - Completed
+          * `CANCELLED` - Cancelled
+          * `NO_SHOW` - No Show
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedBookingList'
+          description: ''
+    post:
+      operationId: api_bookings_create
+      description: |-
+        Booking management
+
+        Drivers: their bookings
+        Staff: facility bookings
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookingRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/BookingRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BookingRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+          description: ''
+  /api/bookings/{id}/:
+    get:
+      operationId: api_bookings_retrieve
+      description: |-
+        Booking management
+
+        Drivers: their bookings
+        Staff: facility bookings
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this booking.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+          description: ''
+    put:
+      operationId: api_bookings_update
+      description: |-
+        Booking management
+
+        Drivers: their bookings
+        Staff: facility bookings
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this booking.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookingRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/BookingRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BookingRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+          description: ''
+    patch:
+      operationId: api_bookings_partial_update
+      description: |-
+        Booking management
+
+        Drivers: their bookings
+        Staff: facility bookings
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this booking.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedBookingRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedBookingRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedBookingRequest'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+          description: ''
+    delete:
+      operationId: api_bookings_destroy
+      description: |-
+        Booking management
+
+        Drivers: their bookings
+        Staff: facility bookings
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this booking.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/bookings/{id}/complete/:
+    post:
+      operationId: api_bookings_complete_create
+      description: |-
+        Complete booking (exit)
+
+        POST /api/bookings/{id}/complete/
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this booking.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookingRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/BookingRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BookingRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+          description: ''
+  /api/bookings/drive_in/:
+    post:
+      operationId: api_bookings_drive_in_create
+      description: |-
+        Create drive-in booking (immediate entry)
+
+        POST /api/bookings/drive_in/
+        Body: {
+            "vehicle_id": "...",
+            "spot_id": "..."
+        }
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookingRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/BookingRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BookingRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+          description: ''
+  /api/bookings/reserve/:
+    post:
+      operationId: api_bookings_reserve_create
+      description: |-
+        Create advance reservation
+
+        POST /api/bookings/reserve/
+        Body: {
+            "vehicle_id": "...",
+            "spot_id": "...",
+            "entry_time": "2026-02-10T14:00:00Z",
+            "expected_exit": "2026-02-10T18:00:00Z"
+        }
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookingRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/BookingRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BookingRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+          description: ''
+  /api/facilities/:
+    get:
+      operationId: api_facilities_list
+      description: |-
+        Facility management
+
+        Public: List and search facilities
+        Owner: Manage their facilities
+        Admin: Manage all
+      parameters:
+      - in: query
+        name: city
+        schema:
+          type: string
+      - in: query
+        name: facility_type
+        schema:
+          type: string
+          enum:
+          - AIRPORT
+          - COMMERCIAL_LOT
+          - HOTEL
+          - MALL
+          - OFFICE_BUILDING
+          - PRIVATE_LOT
+          - RESIDENTIAL
+          - STREET_PARKING
+        description: |-
+          * `COMMERCIAL_LOT` - Commercial Parking Lot
+          * `MALL` - Shopping Mall
+          * `AIRPORT` - Airport
+          * `OFFICE_BUILDING` - Office Building
+          * `HOTEL` - Hotel
+          * `RESIDENTIAL` - Residential
+          * `PRIVATE_LOT` - Private Lot
+          * `STREET_PARKING` - Street Parking
+      - in: query
+        name: has_ev_charging
+        schema:
+          type: boolean
+      - in: query
+        name: is_active
+        schema:
+          type: boolean
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedFacilityListList'
+          description: ''
+    post:
+      operationId: api_facilities_create
+      description: |-
+        Facility management
+
+        Public: List and search facilities
+        Owner: Manage their facilities
+        Admin: Manage all
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FacilityRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/FacilityRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FacilityRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Facility'
+          description: ''
+  /api/facilities/{id}/:
+    get:
+      operationId: api_facilities_retrieve
+      description: |-
+        Facility management
+
+        Public: List and search facilities
+        Owner: Manage their facilities
+        Admin: Manage all
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this facility.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Facility'
+          description: ''
+    put:
+      operationId: api_facilities_update
+      description: |-
+        Facility management
+
+        Public: List and search facilities
+        Owner: Manage their facilities
+        Admin: Manage all
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this facility.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FacilityRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/FacilityRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FacilityRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Facility'
+          description: ''
+    patch:
+      operationId: api_facilities_partial_update
+      description: |-
+        Facility management
+
+        Public: List and search facilities
+        Owner: Manage their facilities
+        Admin: Manage all
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this facility.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedFacilityRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedFacilityRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedFacilityRequest'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Facility'
+          description: ''
+    delete:
+      operationId: api_facilities_destroy
+      description: |-
+        Facility management
+
+        Public: List and search facilities
+        Owner: Manage their facilities
+        Admin: Manage all
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this facility.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/facilities/{id}/availability/:
+    get:
+      operationId: api_facilities_availability_retrieve
+      description: |-
+        Get real-time availability for a facility
+
+        GET /api/facilities/{id}/availability/
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this facility.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Facility'
+          description: ''
+  /api/facilities/{id}/search_spots/:
+    post:
+      operationId: api_facilities_search_spots_create
+      description: |-
+        Search available spots with filters
+
+        POST /api/facilities/{id}/search_spots/
+        Body: {
+            "vehicle_size": "medium",
+            "needs_ev": true,
+            "needs_accessible": false
+        }
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this facility.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FacilityRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/FacilityRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FacilityRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Facility'
+          description: ''
+  /api/facility-staff/:
+    get:
+      operationId: api_facility_staff_list
+      description: Staff assignment management
+      parameters:
+      - in: query
+        name: facility
+        schema:
+          type: string
+          format: uuid
+      - in: query
+        name: is_active
+        schema:
+          type: boolean
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: staff_member
+        schema:
+          type: string
+          format: uuid
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedFacilityStaffList'
+          description: ''
+    post:
+      operationId: api_facility_staff_create
+      description: Staff assignment management
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FacilityStaffRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/FacilityStaffRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FacilityStaffRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FacilityStaff'
+          description: ''
+  /api/facility-staff/{id}/:
+    get:
+      operationId: api_facility_staff_retrieve
+      description: Staff assignment management
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this facility staff.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FacilityStaff'
+          description: ''
+    put:
+      operationId: api_facility_staff_update
+      description: Staff assignment management
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this facility staff.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FacilityStaffRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/FacilityStaffRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FacilityStaffRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FacilityStaff'
+          description: ''
+    patch:
+      operationId: api_facility_staff_partial_update
+      description: Staff assignment management
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this facility staff.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedFacilityStaffRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedFacilityStaffRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedFacilityStaffRequest'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FacilityStaff'
+          description: ''
+    delete:
+      operationId: api_facility_staff_destroy
+      description: Staff assignment management
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this facility staff.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/parking-spots/:
+    get:
+      operationId: api_parking_spots_list
+      description: Spot management - owner/staff only
+      parameters:
+      - in: query
+        name: has_ev_charger
+        schema:
+          type: boolean
+      - in: query
+        name: is_accessible
+        schema:
+          type: boolean
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: size
+        schema:
+          type: string
+          enum:
+          - LARGE
+          - MEDIUM
+          - SMALL
+          - XLARGE
+        description: |-
+          * `SMALL` - Small (Motorcycle/Bicycle)
+          * `MEDIUM` - Medium (Car)
+          * `LARGE` - Large (SUV/Van)
+          * `XLARGE` - Extra Large (Truck/Bus)
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - AVAILABLE
+          - DISABLED
+          - MAINTENANCE
+          - OCCUPIED
+          - RESERVED
+        description: |-
+          * `AVAILABLE` - Available
+          * `OCCUPIED` - Occupied
+          * `RESERVED` - Reserved
+          * `MAINTENANCE` - Under Maintenance
+          * `DISABLED` - Disabled
+      - in: query
+        name: zone
+        schema:
+          type: string
+          format: uuid
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedParkingSpotList'
+          description: ''
+    post:
+      operationId: api_parking_spots_create
+      description: Spot management - owner/staff only
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ParkingSpotRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ParkingSpotRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ParkingSpotRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParkingSpot'
+          description: ''
+  /api/parking-spots/{id}/:
+    get:
+      operationId: api_parking_spots_retrieve
+      description: Spot management - owner/staff only
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this parking spot.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParkingSpot'
+          description: ''
+    put:
+      operationId: api_parking_spots_update
+      description: Spot management - owner/staff only
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this parking spot.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ParkingSpotRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ParkingSpotRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ParkingSpotRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParkingSpot'
+          description: ''
+    patch:
+      operationId: api_parking_spots_partial_update
+      description: Spot management - owner/staff only
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this parking spot.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedParkingSpotRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedParkingSpotRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedParkingSpotRequest'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParkingSpot'
+          description: ''
+    delete:
+      operationId: api_parking_spots_destroy
+      description: Spot management - owner/staff only
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this parking spot.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/pricing-rules/:
+    get:
+      operationId: api_pricing_rules_list
+      description: Pricing rule management - owner/admin only
+      parameters:
+      - in: query
+        name: facility
+        schema:
+          type: string
+          format: uuid
+      - in: query
+        name: is_active
+        schema:
+          type: boolean
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: strategy
+        schema:
+          type: string
+          enum:
+          - DYNAMIC
+          - FLAT_RATE
+          - HOURLY
+          - SLAB
+          - SUBSCRIPTION
+        description: |-
+          * `FLAT_RATE` - Flat Rate (per entry)
+          * `HOURLY` - Hourly Rate
+          * `SLAB` - Slab-based (tiered)
+          * `DYNAMIC` - Dynamic (peak/off-peak)
+          * `SUBSCRIPTION` - Subscription/Pass
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedPricingRuleList'
+          description: ''
+    post:
+      operationId: api_pricing_rules_create
+      description: Pricing rule management - owner/admin only
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PricingRuleRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PricingRuleRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PricingRuleRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PricingRule'
+          description: ''
+  /api/pricing-rules/{id}/:
+    get:
+      operationId: api_pricing_rules_retrieve
+      description: Pricing rule management - owner/admin only
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this pricing rule.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PricingRule'
+          description: ''
+    put:
+      operationId: api_pricing_rules_update
+      description: Pricing rule management - owner/admin only
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this pricing rule.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PricingRuleRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PricingRuleRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PricingRuleRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PricingRule'
+          description: ''
+    patch:
+      operationId: api_pricing_rules_partial_update
+      description: Pricing rule management - owner/admin only
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this pricing rule.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedPricingRuleRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedPricingRuleRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedPricingRuleRequest'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PricingRule'
+          description: ''
+    delete:
+      operationId: api_pricing_rules_destroy
+      description: Pricing rule management - owner/admin only
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this pricing rule.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/pricing/estimate/:
+    post:
+      operationId: api_pricing_estimate_create
+      description: |-
+        Get price estimate
+
+        POST /api/pricing/estimate/
+        Body: {
+            "facility_id": "...",
+            "duration_hours": 2.5,
+            "vehicle_type": "CAR"
+        }
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/subscriptions/:
+    get:
+      operationId: api_subscriptions_list
+      description: Subscription plans
+      parameters:
+      - in: query
+        name: facility
+        schema:
+          type: string
+          format: uuid
+      - in: query
+        name: is_active
+        schema:
+          type: boolean
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedSubscriptionList'
+          description: ''
+    post:
+      operationId: api_subscriptions_create
+      description: Subscription plans
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriptionRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SubscriptionRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SubscriptionRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscription'
+          description: ''
+  /api/subscriptions/{id}/:
+    get:
+      operationId: api_subscriptions_retrieve
+      description: Subscription plans
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this subscription.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscription'
+          description: ''
+    put:
+      operationId: api_subscriptions_update
+      description: Subscription plans
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this subscription.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriptionRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SubscriptionRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SubscriptionRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscription'
+          description: ''
+    patch:
+      operationId: api_subscriptions_partial_update
+      description: Subscription plans
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this subscription.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedSubscriptionRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedSubscriptionRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedSubscriptionRequest'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscription'
+          description: ''
+    delete:
+      operationId: api_subscriptions_destroy
+      description: Subscription plans
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this subscription.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/user-subscriptions/:
+    get:
+      operationId: api_user_subscriptions_list
+      description: User's subscriptions
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedUserSubscriptionList'
+          description: ''
+    post:
+      operationId: api_user_subscriptions_create
+      description: User's subscriptions
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserSubscriptionRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserSubscriptionRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserSubscriptionRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSubscription'
+          description: ''
+  /api/user-subscriptions/{id}/:
+    get:
+      operationId: api_user_subscriptions_retrieve
+      description: User's subscriptions
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this user subscription.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSubscription'
+          description: ''
+    put:
+      operationId: api_user_subscriptions_update
+      description: User's subscriptions
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this user subscription.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserSubscriptionRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserSubscriptionRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserSubscriptionRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSubscription'
+          description: ''
+    patch:
+      operationId: api_user_subscriptions_partial_update
+      description: User's subscriptions
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this user subscription.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserSubscriptionRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserSubscriptionRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserSubscriptionRequest'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSubscription'
+          description: ''
+    delete:
+      operationId: api_user_subscriptions_destroy
+      description: User's subscriptions
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this user subscription.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/user-subscriptions/purchase/:
+    post:
+      operationId: api_user_subscriptions_purchase_create
+      description: |-
+        Purchase a subscription
+
+        POST /api/user-subscriptions/purchase/
+        Body: {"subscription_id": "..."}
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserSubscriptionRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserSubscriptionRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserSubscriptionRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSubscription'
+          description: ''
+  /api/users/:
+    get:
+      operationId: api_users_list
+      description: |-
+        User management endpoints
+
+        - Public: Registration
+        - Authenticated: Profile view/update
+        - Admin: Full user management
+      parameters:
+      - in: query
+        name: is_email_verified
+        schema:
+          type: boolean
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: role
+        schema:
+          type: string
+          enum:
+          - ADMIN
+          - DRIVER
+          - PARKING_OWNER
+          - PARKING_STAFF
+        description: |-
+          * `ADMIN` - Administrator
+          * `PARKING_OWNER` - Parking Owner
+          * `PARKING_STAFF` - Parking Staff
+          * `DRIVER` - Driver
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedUserList'
+          description: ''
+    post:
+      operationId: api_users_create
+      description: |-
+        User management endpoints
+
+        - Public: Registration
+        - Authenticated: Profile view/update
+        - Admin: Full user management
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegistrationRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserRegistrationRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserRegistrationRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserRegistration'
+          description: ''
+  /api/users/{id}/:
+    get:
+      operationId: api_users_retrieve
+      description: |-
+        User management endpoints
+
+        - Public: Registration
+        - Authenticated: Profile view/update
+        - Admin: Full user management
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this User.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDetail'
+          description: ''
+    put:
+      operationId: api_users_update
+      description: |-
+        User management endpoints
+
+        - Public: Registration
+        - Authenticated: Profile view/update
+        - Admin: Full user management
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this User.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    patch:
+      operationId: api_users_partial_update
+      description: |-
+        User management endpoints
+
+        - Public: Registration
+        - Authenticated: Profile view/update
+        - Admin: Full user management
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this User.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserRequest'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    delete:
+      operationId: api_users_destroy
+      description: |-
+        User management endpoints
+
+        - Public: Registration
+        - Authenticated: Profile view/update
+        - Admin: Full user management
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this User.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/users/me/:
+    get:
+      operationId: api_users_me_retrieve
+      description: |-
+        Get current user profile
+
+        GET /api/users/me/
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDetail'
+          description: ''
+  /api/users/stats/:
+    get:
+      operationId: api_users_stats_retrieve
+      description: |-
+        Get user statistics
+
+        GET /api/users/stats/
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /api/vehicles/:
+    get:
+      operationId: api_vehicles_list
+      description: |-
+        Vehicle management endpoints
+
+        Drivers can only manage their own vehicles
+        Staff can view all for verification purposes
+      parameters:
+      - in: query
+        name: is_active
+        schema:
+          type: boolean
+      - in: query
+        name: is_verified
+        schema:
+          type: boolean
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: vehicle_type
+        schema:
+          type: string
+          enum:
+          - BICYCLE
+          - BUS
+          - CAR
+          - ELECTRIC_CAR
+          - ELECTRIC_SUV
+          - MOTORCYCLE
+          - SUV
+          - TRUCK
+          - VAN
+        description: |-
+          * `MOTORCYCLE` - Motorcycle
+          * `CAR` - Car
+          * `SUV` - SUV
+          * `TRUCK` - Truck
+          * `ELECTRIC_CAR` - Electric Car
+          * `ELECTRIC_SUV` - Electric SUV
+          * `BICYCLE` - Bicycle
+          * `VAN` - Van
+          * `BUS` - Bus
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedVehicleListList'
+          description: ''
+    post:
+      operationId: api_vehicles_create
+      description: |-
+        Vehicle management endpoints
+
+        Drivers can only manage their own vehicles
+        Staff can view all for verification purposes
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VehicleRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/VehicleRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/VehicleRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vehicle'
+          description: ''
+  /api/vehicles/{id}/:
+    get:
+      operationId: api_vehicles_retrieve
+      description: |-
+        Vehicle management endpoints
+
+        Drivers can only manage their own vehicles
+        Staff can view all for verification purposes
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this vehicle.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vehicle'
+          description: ''
+    put:
+      operationId: api_vehicles_update
+      description: |-
+        Vehicle management endpoints
+
+        Drivers can only manage their own vehicles
+        Staff can view all for verification purposes
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this vehicle.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VehicleRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/VehicleRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/VehicleRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vehicle'
+          description: ''
+    patch:
+      operationId: api_vehicles_partial_update
+      description: |-
+        Vehicle management endpoints
+
+        Drivers can only manage their own vehicles
+        Staff can view all for verification purposes
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this vehicle.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedVehicleRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedVehicleRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedVehicleRequest'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vehicle'
+          description: ''
+    delete:
+      operationId: api_vehicles_destroy
+      description: |-
+        Vehicle management endpoints
+
+        Drivers can only manage their own vehicles
+        Staff can view all for verification purposes
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this vehicle.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/vehicles/{id}/verify/:
+    post:
+      operationId: api_vehicles_verify_create
+      description: |-
+        Verify a vehicle (staff/admin only)
+
+        POST /api/vehicles/{id}/verify/
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this vehicle.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VehicleRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/VehicleRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/VehicleRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vehicle'
+          description: ''
+  /api/vehicles/my_vehicles/:
+    get:
+      operationId: api_vehicles_my_vehicles_retrieve
+      description: |-
+        Get current user's vehicles
+
+        GET /api/vehicles/my_vehicles/
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vehicle'
+          description: ''
+  /api/zones/:
+    get:
+      operationId: api_zones_list
+      description: Zone management - owner/staff only
+      parameters:
+      - in: query
+        name: facility
+        schema:
+          type: string
+          format: uuid
+      - in: query
+        name: is_active
+        schema:
+          type: boolean
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedZoneList'
+          description: ''
+    post:
+      operationId: api_zones_create
+      description: Zone management - owner/staff only
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ZoneRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ZoneRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ZoneRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zone'
+          description: ''
+  /api/zones/{id}/:
+    get:
+      operationId: api_zones_retrieve
+      description: Zone management - owner/staff only
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this zone.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zone'
+          description: ''
+    put:
+      operationId: api_zones_update
+      description: Zone management - owner/staff only
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this zone.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ZoneRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ZoneRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ZoneRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zone'
+          description: ''
+    patch:
+      operationId: api_zones_partial_update
+      description: Zone management - owner/staff only
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this zone.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedZoneRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedZoneRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedZoneRequest'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zone'
+          description: ''
+    delete:
+      operationId: api_zones_destroy
+      description: Zone management - owner/staff only
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this zone.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+components:
+  schemas:
+    AuditLog:
+      type: object
+      description: Audit log entries - admin only
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        user:
+          type: string
+          format: uuid
+          nullable: true
+        user_email:
+          type: string
+          format: email
+          readOnly: true
+        action:
+          type: string
+          maxLength: 100
+        resource_type:
+          type: string
+          maxLength: 50
+        resource_id:
+          type: string
+          format: uuid
+          nullable: true
+        ip_address:
+          type: string
+          nullable: true
+        metadata: {}
+        timestamp:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - action
+      - id
+      - resource_type
+      - timestamp
+      - user_email
+    Booking:
+      type: object
+      description: Full booking details
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        user:
+          type: string
+          format: uuid
+        user_email:
+          type: string
+          format: email
+          readOnly: true
+        vehicle:
+          type: string
+          format: uuid
+        vehicle_plate:
+          type: string
+          readOnly: true
+        spot:
+          type: string
+          format: uuid
+        spot_number:
+          type: string
+          readOnly: true
+        facility:
+          type: string
+          format: uuid
+        facility_name:
+          type: string
+          readOnly: true
+        booking_type:
+          $ref: '#/components/schemas/BookingTypeEnum'
+        status:
+          $ref: '#/components/schemas/BookingStatusEnum'
+        ticket_number:
+          type: string
+          readOnly: true
+        entry_time:
+          type: string
+          format: date-time
+        expected_exit:
+          type: string
+          format: date-time
+          nullable: true
+        actual_exit:
+          type: string
+          format: date-time
+          nullable: true
+        grace_period_minutes:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        estimated_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+        final_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          readOnly: true
+          nullable: true
+        payment:
+          type: string
+          format: uuid
+          nullable: true
+        duration:
+          type: integer
+          readOnly: true
+        is_overstay:
+          type: boolean
+          readOnly: true
+        metadata: {}
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - duration
+      - entry_time
+      - facility
+      - facility_name
+      - final_price
+      - id
+      - is_overstay
+      - spot
+      - spot_number
+      - ticket_number
+      - updated_at
+      - user
+      - user_email
+      - vehicle
+      - vehicle_plate
+    BookingExtension:
+      type: object
+      description: Booking extension
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        booking:
+          type: string
+          format: uuid
+        booking_ticket:
+          type: string
+          readOnly: true
+        previous_exit:
+          type: string
+          format: date-time
+        new_exit:
+          type: string
+          format: date-time
+        additional_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        is_approved:
+          type: boolean
+        requested_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - additional_price
+      - booking
+      - booking_ticket
+      - id
+      - new_exit
+      - previous_exit
+      - requested_at
+    BookingExtensionRequest:
+      type: object
+      description: Booking extension
+      properties:
+        booking:
+          type: string
+          format: uuid
+        previous_exit:
+          type: string
+          format: date-time
+        new_exit:
+          type: string
+          format: date-time
+        additional_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        is_approved:
+          type: boolean
+      required:
+      - additional_price
+      - booking
+      - new_exit
+      - previous_exit
+    BookingRequest:
+      type: object
+      description: Full booking details
+      properties:
+        user:
+          type: string
+          format: uuid
+        vehicle:
+          type: string
+          format: uuid
+        spot:
+          type: string
+          format: uuid
+        facility:
+          type: string
+          format: uuid
+        booking_type:
+          $ref: '#/components/schemas/BookingTypeEnum'
+        status:
+          $ref: '#/components/schemas/BookingStatusEnum'
+        entry_time:
+          type: string
+          format: date-time
+        expected_exit:
+          type: string
+          format: date-time
+          nullable: true
+        actual_exit:
+          type: string
+          format: date-time
+          nullable: true
+        grace_period_minutes:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        estimated_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+        payment:
+          type: string
+          format: uuid
+          nullable: true
+        metadata: {}
+      required:
+      - entry_time
+      - facility
+      - spot
+      - user
+      - vehicle
+    BookingStatusEnum:
+      enum:
+      - PENDING
+      - CONFIRMED
+      - ACTIVE
+      - COMPLETED
+      - CANCELLED
+      - NO_SHOW
+      type: string
+      description: |-
+        * `PENDING` - Pending Payment
+        * `CONFIRMED` - Confirmed
+        * `ACTIVE` - Currently Parked
+        * `COMPLETED` - Completed
+        * `CANCELLED` - Cancelled
+        * `NO_SHOW` - No Show
+    BookingTypeEnum:
+      enum:
+      - RESERVATION
+      - DRIVE_IN
+      type: string
+      description: |-
+        * `RESERVATION` - Advance Reservation
+        * `DRIVE_IN` - Drive-In (Walk-up)
+    Facility:
+      type: object
+      description: Full facility details
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        owner:
+          type: string
+          format: uuid
+        owner_name:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          maxLength: 200
+        slug:
+          type: string
+          readOnly: true
+          pattern: ^[-a-zA-Z0-9_]+$
+        facility_type:
+          $ref: '#/components/schemas/FacilityTypeEnum'
+        description:
+          type: string
+        address:
+          type: string
+        city:
+          type: string
+          maxLength: 100
+        state:
+          type: string
+          maxLength: 100
+        postal_code:
+          type: string
+          maxLength: 20
+        country:
+          type: string
+          maxLength: 100
+        latitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,6})?$
+          nullable: true
+          description: For map integration
+        longitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,6})?$
+          nullable: true
+          description: For map integration
+        phone:
+          type: string
+          maxLength: 20
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        operating_hours: {}
+        has_ev_charging:
+          type: boolean
+        has_covered_parking:
+          type: boolean
+        has_security:
+          type: boolean
+        has_cctv:
+          type: boolean
+        has_valet:
+          type: boolean
+        image:
+          type: string
+          format: uri
+          nullable: true
+        total_spots:
+          type: integer
+          readOnly: true
+        available_spots:
+          type: integer
+          readOnly: true
+        availability_percentage:
+          type: string
+          readOnly: true
+        is_active:
+          type: boolean
+        is_verified:
+          type: boolean
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - address
+      - availability_percentage
+      - available_spots
+      - city
+      - created_at
+      - id
+      - is_verified
+      - name
+      - owner
+      - owner_name
+      - postal_code
+      - slug
+      - state
+      - total_spots
+      - updated_at
+    FacilityList:
+      type: object
+      description: Lightweight for list views
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 200
+        city:
+          type: string
+          maxLength: 100
+        facility_type:
+          $ref: '#/components/schemas/FacilityTypeEnum'
+        total_spots:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        available_spots:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        availability:
+          type: string
+          readOnly: true
+        has_ev_charging:
+          type: boolean
+        latitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,6})?$
+          nullable: true
+          description: For map integration
+        longitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,6})?$
+          nullable: true
+          description: For map integration
+        is_active:
+          type: boolean
+      required:
+      - availability
+      - city
+      - id
+      - name
+    FacilityRequest:
+      type: object
+      description: Full facility details
+      properties:
+        owner:
+          type: string
+          format: uuid
+        name:
+          type: string
+          minLength: 1
+          maxLength: 200
+        facility_type:
+          $ref: '#/components/schemas/FacilityTypeEnum'
+        description:
+          type: string
+        address:
+          type: string
+          minLength: 1
+        city:
+          type: string
+          minLength: 1
+          maxLength: 100
+        state:
+          type: string
+          minLength: 1
+          maxLength: 100
+        postal_code:
+          type: string
+          minLength: 1
+          maxLength: 20
+        country:
+          type: string
+          minLength: 1
+          maxLength: 100
+        latitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,6})?$
+          nullable: true
+          description: For map integration
+        longitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,6})?$
+          nullable: true
+          description: For map integration
+        phone:
+          type: string
+          maxLength: 20
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        operating_hours: {}
+        has_ev_charging:
+          type: boolean
+        has_covered_parking:
+          type: boolean
+        has_security:
+          type: boolean
+        has_cctv:
+          type: boolean
+        has_valet:
+          type: boolean
+        image:
+          type: string
+          format: binary
+          nullable: true
+        is_active:
+          type: boolean
+      required:
+      - address
+      - city
+      - name
+      - owner
+      - postal_code
+      - state
+    FacilityStaff:
+      type: object
+      description: Staff assignment
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        facility:
+          type: string
+          format: uuid
+        facility_name:
+          type: string
+          readOnly: true
+        staff_member:
+          type: string
+          format: uuid
+        staff_name:
+          type: string
+          readOnly: true
+        staff_email:
+          type: string
+          format: email
+          readOnly: true
+        can_manage_bookings:
+          type: boolean
+        can_manage_violations:
+          type: boolean
+        can_view_reports:
+          type: boolean
+        assigned_at:
+          type: string
+          format: date-time
+          readOnly: true
+        is_active:
+          type: boolean
+      required:
+      - assigned_at
+      - facility
+      - facility_name
+      - id
+      - staff_email
+      - staff_member
+      - staff_name
+    FacilityStaffRequest:
+      type: object
+      description: Staff assignment
+      properties:
+        facility:
+          type: string
+          format: uuid
+        staff_member:
+          type: string
+          format: uuid
+        can_manage_bookings:
+          type: boolean
+        can_manage_violations:
+          type: boolean
+        can_view_reports:
+          type: boolean
+        is_active:
+          type: boolean
+      required:
+      - facility
+      - staff_member
+    FacilityTypeEnum:
+      enum:
+      - COMMERCIAL_LOT
+      - MALL
+      - AIRPORT
+      - OFFICE_BUILDING
+      - HOTEL
+      - RESIDENTIAL
+      - PRIVATE_LOT
+      - STREET_PARKING
+      type: string
+      description: |-
+        * `COMMERCIAL_LOT` - Commercial Parking Lot
+        * `MALL` - Shopping Mall
+        * `AIRPORT` - Airport
+        * `OFFICE_BUILDING` - Office Building
+        * `HOTEL` - Hotel
+        * `RESIDENTIAL` - Residential
+        * `PRIVATE_LOT` - Private Lot
+        * `STREET_PARKING` - Street Parking
+    PaginatedAuditLogList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditLog'
+    PaginatedBookingExtensionList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/BookingExtension'
+    PaginatedBookingList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Booking'
+    PaginatedFacilityListList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/FacilityList'
+    PaginatedFacilityStaffList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/FacilityStaff'
+    PaginatedParkingSpotList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ParkingSpot'
+    PaginatedPricingRuleList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PricingRule'
+    PaginatedSubscriptionList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Subscription'
+    PaginatedUserList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+    PaginatedUserSubscriptionList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserSubscription'
+    PaginatedVehicleListList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/VehicleList'
+    PaginatedZoneList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Zone'
+    ParkingSpot:
+      type: object
+      description: Parking spot details
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        zone:
+          type: string
+          format: uuid
+        zone_name:
+          type: string
+          readOnly: true
+        facility_name:
+          type: string
+          readOnly: true
+        spot_number:
+          type: string
+          maxLength: 20
+        size:
+          $ref: '#/components/schemas/SizeEnum'
+        has_ev_charger:
+          type: boolean
+        is_covered:
+          type: boolean
+        is_accessible:
+          type: boolean
+          description: Handicap accessible
+        is_vip:
+          type: boolean
+        status:
+          allOf:
+          - $ref: '#/components/schemas/ParkingSpotStatusEnum'
+          readOnly: true
+        current_booking:
+          type: string
+          format: uuid
+          readOnly: true
+          nullable: true
+        metadata: {}
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - current_booking
+      - facility_name
+      - id
+      - spot_number
+      - status
+      - updated_at
+      - zone
+      - zone_name
+    ParkingSpotRequest:
+      type: object
+      description: Parking spot details
+      properties:
+        zone:
+          type: string
+          format: uuid
+        spot_number:
+          type: string
+          minLength: 1
+          maxLength: 20
+        size:
+          $ref: '#/components/schemas/SizeEnum'
+        has_ev_charger:
+          type: boolean
+        is_covered:
+          type: boolean
+        is_accessible:
+          type: boolean
+          description: Handicap accessible
+        is_vip:
+          type: boolean
+        metadata: {}
+        is_active:
+          type: boolean
+      required:
+      - spot_number
+      - zone
+    ParkingSpotStatusEnum:
+      enum:
+      - AVAILABLE
+      - OCCUPIED
+      - RESERVED
+      - MAINTENANCE
+      - DISABLED
+      type: string
+      description: |-
+        * `AVAILABLE` - Available
+        * `OCCUPIED` - Occupied
+        * `RESERVED` - Reserved
+        * `MAINTENANCE` - Under Maintenance
+        * `DISABLED` - Disabled
+    PatchedBookingExtensionRequest:
+      type: object
+      description: Booking extension
+      properties:
+        booking:
+          type: string
+          format: uuid
+        previous_exit:
+          type: string
+          format: date-time
+        new_exit:
+          type: string
+          format: date-time
+        additional_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        is_approved:
+          type: boolean
+    PatchedBookingRequest:
+      type: object
+      description: Full booking details
+      properties:
+        user:
+          type: string
+          format: uuid
+        vehicle:
+          type: string
+          format: uuid
+        spot:
+          type: string
+          format: uuid
+        facility:
+          type: string
+          format: uuid
+        booking_type:
+          $ref: '#/components/schemas/BookingTypeEnum'
+        status:
+          $ref: '#/components/schemas/BookingStatusEnum'
+        entry_time:
+          type: string
+          format: date-time
+        expected_exit:
+          type: string
+          format: date-time
+          nullable: true
+        actual_exit:
+          type: string
+          format: date-time
+          nullable: true
+        grace_period_minutes:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        estimated_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+        payment:
+          type: string
+          format: uuid
+          nullable: true
+        metadata: {}
+    PatchedFacilityRequest:
+      type: object
+      description: Full facility details
+      properties:
+        owner:
+          type: string
+          format: uuid
+        name:
+          type: string
+          minLength: 1
+          maxLength: 200
+        facility_type:
+          $ref: '#/components/schemas/FacilityTypeEnum'
+        description:
+          type: string
+        address:
+          type: string
+          minLength: 1
+        city:
+          type: string
+          minLength: 1
+          maxLength: 100
+        state:
+          type: string
+          minLength: 1
+          maxLength: 100
+        postal_code:
+          type: string
+          minLength: 1
+          maxLength: 20
+        country:
+          type: string
+          minLength: 1
+          maxLength: 100
+        latitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,6})?$
+          nullable: true
+          description: For map integration
+        longitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,6})?$
+          nullable: true
+          description: For map integration
+        phone:
+          type: string
+          maxLength: 20
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        operating_hours: {}
+        has_ev_charging:
+          type: boolean
+        has_covered_parking:
+          type: boolean
+        has_security:
+          type: boolean
+        has_cctv:
+          type: boolean
+        has_valet:
+          type: boolean
+        image:
+          type: string
+          format: binary
+          nullable: true
+        is_active:
+          type: boolean
+    PatchedFacilityStaffRequest:
+      type: object
+      description: Staff assignment
+      properties:
+        facility:
+          type: string
+          format: uuid
+        staff_member:
+          type: string
+          format: uuid
+        can_manage_bookings:
+          type: boolean
+        can_manage_violations:
+          type: boolean
+        can_view_reports:
+          type: boolean
+        is_active:
+          type: boolean
+    PatchedParkingSpotRequest:
+      type: object
+      description: Parking spot details
+      properties:
+        zone:
+          type: string
+          format: uuid
+        spot_number:
+          type: string
+          minLength: 1
+          maxLength: 20
+        size:
+          $ref: '#/components/schemas/SizeEnum'
+        has_ev_charger:
+          type: boolean
+        is_covered:
+          type: boolean
+        is_accessible:
+          type: boolean
+          description: Handicap accessible
+        is_vip:
+          type: boolean
+        metadata: {}
+        is_active:
+          type: boolean
+    PatchedPricingRuleRequest:
+      type: object
+      description: Pricing rule configuration
+      properties:
+        facility:
+          type: string
+          format: uuid
+        name:
+          type: string
+          minLength: 1
+          maxLength: 200
+        strategy:
+          $ref: '#/components/schemas/StrategyEnum'
+        config: {}
+        applies_to_vehicle_types:
+          description: Empty = all types. E.g., ['CAR', 'SUV']
+        applies_to_spot_sizes:
+          description: Empty = all sizes. E.g., ['MEDIUM', 'LARGE']
+        priority:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        free_minutes:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          description: First X minutes are free
+        overstay_penalty_rate:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        valid_from:
+          type: string
+          format: date-time
+          nullable: true
+        valid_until:
+          type: string
+          format: date-time
+          nullable: true
+        is_active:
+          type: boolean
+    PatchedSubscriptionRequest:
+      type: object
+      description: Subscription/pass plans
+      properties:
+        facility:
+          type: string
+          format: uuid
+        name:
+          type: string
+          minLength: 1
+          maxLength: 200
+        description:
+          type: string
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        duration_days:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          nullable: true
+          description: Validity in days (null if entry-based)
+        entry_count:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          nullable: true
+          description: Number of entries allowed (null if time-based)
+        max_duration_per_entry:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          nullable: true
+          description: Max hours per single parking session
+        is_active:
+          type: boolean
+    PatchedUserRequest:
+      type: object
+      description: Public user profile - safe for external exposure
+      properties:
+        email:
+          type: string
+          format: email
+          minLength: 1
+          maxLength: 254
+        first_name:
+          type: string
+          minLength: 1
+          maxLength: 150
+        last_name:
+          type: string
+          minLength: 1
+          maxLength: 150
+        phone:
+          type: string
+          nullable: true
+          maxLength: 20
+        is_email_verified:
+          type: boolean
+        is_phone_verified:
+          type: boolean
+    PatchedUserSubscriptionRequest:
+      type: object
+      description: User's active subscriptions
+      properties:
+        user:
+          type: string
+          format: uuid
+        subscription:
+          type: string
+          format: uuid
+        expires_at:
+          type: string
+          format: date-time
+          nullable: true
+        entries_remaining:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          nullable: true
+        is_active:
+          type: boolean
+    PatchedVehicleRequest:
+      type: object
+      description: Vehicle serializer with automatic user assignment
+      properties:
+        plate_number:
+          type: string
+          minLength: 1
+          maxLength: 20
+        vehicle_type:
+          $ref: '#/components/schemas/VehicleTypeEnum'
+        make:
+          type: string
+          maxLength: 50
+        model:
+          type: string
+          maxLength: 50
+        year:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          nullable: true
+        color:
+          type: string
+          maxLength: 30
+        image:
+          type: string
+          format: binary
+          nullable: true
+        metadata: {}
+        is_active:
+          type: boolean
+    PatchedZoneRequest:
+      type: object
+      description: Zone with spot counts
+      properties:
+        facility:
+          type: string
+          format: uuid
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+        code:
+          type: string
+          minLength: 1
+          maxLength: 20
+        description:
+          type: string
+        is_covered:
+          type: boolean
+        is_accessible:
+          type: boolean
+          description: Accessibility for disabled persons
+        display_order:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        is_active:
+          type: boolean
+    PricingRule:
+      type: object
+      description: Pricing rule configuration
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        facility:
+          type: string
+          format: uuid
+        facility_name:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          maxLength: 200
+        strategy:
+          $ref: '#/components/schemas/StrategyEnum'
+        config: {}
+        applies_to_vehicle_types:
+          description: Empty = all types. E.g., ['CAR', 'SUV']
+        applies_to_spot_sizes:
+          description: Empty = all sizes. E.g., ['MEDIUM', 'LARGE']
+        priority:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        free_minutes:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          description: First X minutes are free
+        overstay_penalty_rate:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        valid_from:
+          type: string
+          format: date-time
+          nullable: true
+        valid_until:
+          type: string
+          format: date-time
+          nullable: true
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - facility
+      - facility_name
+      - id
+      - name
+      - updated_at
+    PricingRuleRequest:
+      type: object
+      description: Pricing rule configuration
+      properties:
+        facility:
+          type: string
+          format: uuid
+        name:
+          type: string
+          minLength: 1
+          maxLength: 200
+        strategy:
+          $ref: '#/components/schemas/StrategyEnum'
+        config: {}
+        applies_to_vehicle_types:
+          description: Empty = all types. E.g., ['CAR', 'SUV']
+        applies_to_spot_sizes:
+          description: Empty = all sizes. E.g., ['MEDIUM', 'LARGE']
+        priority:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        free_minutes:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          description: First X minutes are free
+        overstay_penalty_rate:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        valid_from:
+          type: string
+          format: date-time
+          nullable: true
+        valid_until:
+          type: string
+          format: date-time
+          nullable: true
+        is_active:
+          type: boolean
+      required:
+      - facility
+      - name
+    RoleEnum:
+      enum:
+      - ADMIN
+      - PARKING_OWNER
+      - PARKING_STAFF
+      - DRIVER
+      type: string
+      description: |-
+        * `ADMIN` - Administrator
+        * `PARKING_OWNER` - Parking Owner
+        * `PARKING_STAFF` - Parking Staff
+        * `DRIVER` - Driver
+    SizeEnum:
+      enum:
+      - SMALL
+      - MEDIUM
+      - LARGE
+      - XLARGE
+      type: string
+      description: |-
+        * `SMALL` - Small (Motorcycle/Bicycle)
+        * `MEDIUM` - Medium (Car)
+        * `LARGE` - Large (SUV/Van)
+        * `XLARGE` - Extra Large (Truck/Bus)
+    StrategyEnum:
+      enum:
+      - FLAT_RATE
+      - HOURLY
+      - SLAB
+      - DYNAMIC
+      - SUBSCRIPTION
+      type: string
+      description: |-
+        * `FLAT_RATE` - Flat Rate (per entry)
+        * `HOURLY` - Hourly Rate
+        * `SLAB` - Slab-based (tiered)
+        * `DYNAMIC` - Dynamic (peak/off-peak)
+        * `SUBSCRIPTION` - Subscription/Pass
+    Subscription:
+      type: object
+      description: Subscription/pass plans
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        facility:
+          type: string
+          format: uuid
+        facility_name:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          maxLength: 200
+        description:
+          type: string
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        duration_days:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          nullable: true
+          description: Validity in days (null if entry-based)
+        entry_count:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          nullable: true
+          description: Number of entries allowed (null if time-based)
+        max_duration_per_entry:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          nullable: true
+          description: Max hours per single parking session
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - facility
+      - facility_name
+      - id
+      - name
+      - price
+      - updated_at
+    SubscriptionRequest:
+      type: object
+      description: Subscription/pass plans
+      properties:
+        facility:
+          type: string
+          format: uuid
+        name:
+          type: string
+          minLength: 1
+          maxLength: 200
+        description:
+          type: string
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        duration_days:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          nullable: true
+          description: Validity in days (null if entry-based)
+        entry_count:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          nullable: true
+          description: Number of entries allowed (null if time-based)
+        max_duration_per_entry:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          nullable: true
+          description: Max hours per single parking session
+        is_active:
+          type: boolean
+      required:
+      - facility
+      - name
+      - price
+    TokenObtainPair:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+          readOnly: true
+      required:
+      - access
+      - refresh
+    TokenObtainPairRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          writeOnly: true
+          minLength: 1
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - email
+      - password
+    TokenRefresh:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+      required:
+      - access
+      - refresh
+    TokenRefreshRequest:
+      type: object
+      properties:
+        refresh:
+          type: string
+          minLength: 1
+      required:
+      - refresh
+    User:
+      type: object
+      description: Public user profile - safe for external exposure
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        full_name:
+          type: string
+          readOnly: true
+        phone:
+          type: string
+          nullable: true
+          maxLength: 20
+        role:
+          allOf:
+          - $ref: '#/components/schemas/RoleEnum'
+          readOnly: true
+        is_email_verified:
+          type: boolean
+        is_phone_verified:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - email
+      - first_name
+      - full_name
+      - id
+      - last_name
+      - role
+    UserDetail:
+      type: object
+      description: Detailed user profile - for authenticated user accessing their
+        own data
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        full_name:
+          type: string
+          readOnly: true
+        phone:
+          type: string
+          nullable: true
+          maxLength: 20
+        role:
+          allOf:
+          - $ref: '#/components/schemas/RoleEnum'
+          readOnly: true
+        is_email_verified:
+          type: boolean
+        is_phone_verified:
+          type: boolean
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        last_login_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+      required:
+      - created_at
+      - email
+      - first_name
+      - full_name
+      - id
+      - last_login_at
+      - last_name
+      - role
+      - updated_at
+    UserRegistration:
+      type: object
+      description: User registration - driver signup
+      properties:
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        phone:
+          type: string
+          nullable: true
+          maxLength: 20
+      required:
+      - email
+      - first_name
+      - last_name
+    UserRegistrationRequest:
+      type: object
+      description: User registration - driver signup
+      properties:
+        email:
+          type: string
+          format: email
+          minLength: 1
+          maxLength: 254
+        password:
+          type: string
+          writeOnly: true
+          minLength: 8
+        password_confirm:
+          type: string
+          writeOnly: true
+          minLength: 1
+        first_name:
+          type: string
+          minLength: 1
+          maxLength: 150
+        last_name:
+          type: string
+          minLength: 1
+          maxLength: 150
+        phone:
+          type: string
+          nullable: true
+          maxLength: 20
+      required:
+      - email
+      - first_name
+      - last_name
+      - password
+      - password_confirm
+    UserRequest:
+      type: object
+      description: Public user profile - safe for external exposure
+      properties:
+        email:
+          type: string
+          format: email
+          minLength: 1
+          maxLength: 254
+        first_name:
+          type: string
+          minLength: 1
+          maxLength: 150
+        last_name:
+          type: string
+          minLength: 1
+          maxLength: 150
+        phone:
+          type: string
+          nullable: true
+          maxLength: 20
+        is_email_verified:
+          type: boolean
+        is_phone_verified:
+          type: boolean
+      required:
+      - email
+      - first_name
+      - last_name
+    UserSubscription:
+      type: object
+      description: User's active subscriptions
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        user:
+          type: string
+          format: uuid
+        subscription:
+          type: string
+          format: uuid
+        subscription_name:
+          type: string
+          readOnly: true
+        facility_name:
+          type: string
+          readOnly: true
+        activated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        expires_at:
+          type: string
+          format: date-time
+          nullable: true
+        entries_remaining:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          nullable: true
+        is_active:
+          type: boolean
+        is_valid_now:
+          type: boolean
+          readOnly: true
+      required:
+      - activated_at
+      - facility_name
+      - id
+      - is_valid_now
+      - subscription
+      - subscription_name
+      - user
+    UserSubscriptionRequest:
+      type: object
+      description: User's active subscriptions
+      properties:
+        user:
+          type: string
+          format: uuid
+        subscription:
+          type: string
+          format: uuid
+        expires_at:
+          type: string
+          format: date-time
+          nullable: true
+        entries_remaining:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          nullable: true
+        is_active:
+          type: boolean
+      required:
+      - subscription
+      - user
+    Vehicle:
+      type: object
+      description: Vehicle serializer with automatic user assignment
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        user:
+          type: string
+          format: uuid
+          readOnly: true
+        user_email:
+          type: string
+          format: email
+          readOnly: true
+        plate_number:
+          type: string
+          maxLength: 20
+        vehicle_type:
+          $ref: '#/components/schemas/VehicleTypeEnum'
+        make:
+          type: string
+          maxLength: 50
+        model:
+          type: string
+          maxLength: 50
+        year:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          nullable: true
+        color:
+          type: string
+          maxLength: 30
+        image:
+          type: string
+          format: uri
+          nullable: true
+        metadata: {}
+        is_active:
+          type: boolean
+        is_verified:
+          type: boolean
+          readOnly: true
+          description: Verified by admin or through document upload
+        size_category:
+          type: string
+          readOnly: true
+        is_electric_vehicle:
+          type: boolean
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - is_electric_vehicle
+      - is_verified
+      - plate_number
+      - size_category
+      - updated_at
+      - user
+      - user_email
+      - vehicle_type
+    VehicleList:
+      type: object
+      description: Lightweight serializer for vehicle lists
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        plate_number:
+          type: string
+          maxLength: 20
+        vehicle_type:
+          $ref: '#/components/schemas/VehicleTypeEnum'
+        vehicle_type_display:
+          type: string
+          readOnly: true
+        make:
+          type: string
+          maxLength: 50
+        model:
+          type: string
+          maxLength: 50
+        color:
+          type: string
+          maxLength: 30
+        is_verified:
+          type: boolean
+          description: Verified by admin or through document upload
+        created_at:
+          type: string
+          format: date-time
+      required:
+      - id
+      - plate_number
+      - vehicle_type
+      - vehicle_type_display
+    VehicleRequest:
+      type: object
+      description: Vehicle serializer with automatic user assignment
+      properties:
+        plate_number:
+          type: string
+          minLength: 1
+          maxLength: 20
+        vehicle_type:
+          $ref: '#/components/schemas/VehicleTypeEnum'
+        make:
+          type: string
+          maxLength: 50
+        model:
+          type: string
+          maxLength: 50
+        year:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          nullable: true
+        color:
+          type: string
+          maxLength: 30
+        image:
+          type: string
+          format: binary
+          nullable: true
+        metadata: {}
+        is_active:
+          type: boolean
+      required:
+      - plate_number
+      - vehicle_type
+    VehicleTypeEnum:
+      enum:
+      - MOTORCYCLE
+      - CAR
+      - SUV
+      - TRUCK
+      - ELECTRIC_CAR
+      - ELECTRIC_SUV
+      - BICYCLE
+      - VAN
+      - BUS
+      type: string
+      description: |-
+        * `MOTORCYCLE` - Motorcycle
+        * `CAR` - Car
+        * `SUV` - SUV
+        * `TRUCK` - Truck
+        * `ELECTRIC_CAR` - Electric Car
+        * `ELECTRIC_SUV` - Electric SUV
+        * `BICYCLE` - Bicycle
+        * `VAN` - Van
+        * `BUS` - Bus
+    Zone:
+      type: object
+      description: Zone with spot counts
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        facility:
+          type: string
+          format: uuid
+        facility_name:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        code:
+          type: string
+          maxLength: 20
+        description:
+          type: string
+        is_covered:
+          type: boolean
+        is_accessible:
+          type: boolean
+          description: Accessibility for disabled persons
+        display_order:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        total_spots:
+          type: integer
+          readOnly: true
+        available_spots:
+          type: integer
+          readOnly: true
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - available_spots
+      - code
+      - created_at
+      - facility
+      - facility_name
+      - id
+      - name
+      - total_spots
+      - updated_at
+    ZoneRequest:
+      type: object
+      description: Zone with spot counts
+      properties:
+        facility:
+          type: string
+          format: uuid
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+        code:
+          type: string
+          minLength: 1
+          maxLength: 20
+        description:
+          type: string
+        is_covered:
+          type: boolean
+        is_accessible:
+          type: boolean
+          description: Accessibility for disabled persons
+        display_order:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        is_active:
+          type: boolean
+      required:
+      - code
+      - facility
+      - name
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
