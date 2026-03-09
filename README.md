@@ -2,10 +2,6 @@
 
 Unified workspace for the ParkMe backend and frontend.
 
-## Screenshots
-<img width="1477" height="1242" alt="Screenshot 2026-02-05 at 11 30 08 AM" src="https://github.com/user-attachments/assets/f7728f66-a488-44bb-8b32-71b6bfa55f5f" />
-<img width="1477" height="1242" alt="Screenshot 2026-02-05 at 11 31 07 AM" src="https://github.com/user-attachments/assets/2fead979-d57f-47ff-919e-ef6e26913284" />
-
 ## Services
 
 - Backend (Django API): http://localhost:8000
